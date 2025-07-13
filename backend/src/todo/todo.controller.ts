@@ -14,7 +14,8 @@ import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Todo } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -23,28 +24,47 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class TodoController {
    constructor(private readonly todosService: TodoService) {}
 
+   private getUserid(req) {
+      return req.user.userId;
+   }
+
    @Post()
-   create(@Body() dto: CreateTodoDto, @Request() req) {
-      return this.todosService.create(req.user.userId, dto);
+   @ApiOperation({ summary: 'Cria uma nova tarefa' })
+   @ApiResponse({ status: 201, description: 'Tarefa criada com sucesso' })
+   create(@Body() dto: CreateTodoDto, @Request() req): Promise<Todo> {
+      const userId = this.getUserid(req);
+      return this.todosService.create(userId, dto);
    }
 
    @Get()
-   findAll(@Request() req) {
-      return this.todosService.findAll(req.user.userId);
+   @ApiOperation({ summary: 'Lista todas as tarefas do usuário' })
+   findAll(@Request() req): Promise<Todo[]> {
+      const userId = this.getUserid(req);
+      return this.todosService.findAll(userId);
    }
 
    @Get(':id')
-   findOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
-      return this.todosService.findOne(id, req.user.userId);
+   @ApiOperation({ summary: 'Busca uma tarefa específica' })
+   findOne(@Param('id', ParseIntPipe) id: number, @Request() req): Promise<Todo> {
+      const userId = this.getUserid(req);
+      return this.todosService.findOneByUser(id, userId);
    }
 
    @Patch(':id')
-   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTodoDto, @Request() req) {
-      return this.todosService.update(id, req.user.userId, dto);
+   @ApiOperation({ summary: 'Atualiza uma tarefa' })
+   update(
+      @Param('id', ParseIntPipe) id: number,
+      @Body() dto: UpdateTodoDto,
+      @Request() req,
+   ): Promise<Todo> {
+      const userId = this.getUserid(req);
+      return this.todosService.update(id, userId, dto);
    }
 
    @Delete(':id')
-   remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
-      return this.todosService.remove(id, req.user.userId);
+   @ApiOperation({ summary: 'Remove uma tarefa' })
+   remove(@Param('id', ParseIntPipe) id: number, @Request() req): Promise<Todo> {
+      const userId = this.getUserid(req);
+      return this.todosService.remove(id, userId);
    }
 }
