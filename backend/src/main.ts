@@ -10,10 +10,10 @@ async function bootstrap() {
 
    // Configuração do Swagger
    const config = new DocumentBuilder()
-      .setTitle('Minha API NestJS')
-      .setDescription('API para gerenciamento de usuários e todos')
+      .setTitle('Todo API')
+      .setDescription('API para tarefas')
       .setVersion('1.0')
-      // .addBearerAuth() // JWT Auth no Swagger
+      .addBearerAuth()
       .build();
 
    const document = SwaggerModule.createDocument(app, config);
