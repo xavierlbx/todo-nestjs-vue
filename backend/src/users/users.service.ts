@@ -2,31 +2,35 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateUserDto) {
-    const userExists = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
+   private async emailExists(email: string): Promise<boolean> {
+      const user = await this.prisma.user.findUnique({ where: { email } });
+      return !!user;
+   }
 
-    if (userExists) {
-      throw new ConflictException('E-mail já está em uso.');
-    }
+   async create(dto: CreateUserDto): Promise<Omit<User, 'password'>> {
+      const { email, password } = dto;
 
-    const hashedPassword = await bcrypt.hash(dto.password, 10);
+      const emailExists = await this.emailExists(email);
+      if (emailExists) {
+         throw new ConflictException('E-mail já está em uso.');
+      }
 
-    const user = await this.prisma.user.create({
-      data: {
-        email: dto.email,
-        password: hashedPassword,
-      },
-    });
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Evita retornar a senha
-    const { password, ...rest } = user;
-    return rest;
-  }
+      const user = await this.prisma.user.create({
+         data: {
+            email,
+            password: hashedPassword,
+         },
+      });
+
+      const { password: _, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+   }
 }
