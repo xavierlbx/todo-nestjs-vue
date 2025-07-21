@@ -2,7 +2,36 @@
 import { ref } from 'vue';
 import bgImage from '../assets/backgroundAuth.png';
 
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
+interface SignUpForm {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 const isLogin = ref(true);
+const formLogin = ref<LoginForm>({
+  email: '',
+  password: '',
+});
+
+const formSignUp = ref<SignUpForm>({
+  email: '',
+  password: '',
+  confirmPassword: '',
+});
+
+function Login() {
+  console.log(formLogin.value);
+}
+
+function SignUp() {
+  console.log(formSignUp.value);
+}
 
 function toggleForm() {
   isLogin.value = !isLogin.value;
@@ -16,6 +45,7 @@ function toggleForm() {
       :style="{ backgroundImage: `url(${bgImage})` }"
     >
       <Transition name="slide-horizontal" mode="out-in">
+        <!-- Login -->
         <div
           v-if="isLogin"
           key="login"
@@ -31,6 +61,7 @@ function toggleForm() {
                 <label class="text-lg">E-mail</label>
                 <input
                   class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  v-model="formLogin.email"
                   type="email"
                   placeholder="Digite seu email"
                 />
@@ -39,6 +70,7 @@ function toggleForm() {
                 <label class="text-lg">Senha</label>
                 <input
                   class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  v-model="formLogin.password"
                   type="password"
                   placeholder="Digite sua senha"
                 />
@@ -48,6 +80,7 @@ function toggleForm() {
           <!-- Rodapé LOGIN -->
           <div class="flex flex-col items-center mt-6">
             <button
+              @click="Login()"
               class="bg-purple-500 font-baloo font-semibold rounded-full py-1.5 px-8 text-xl hover:bg-purple-600 focus:bg-purple-400"
             >
               Entrar
@@ -64,7 +97,9 @@ function toggleForm() {
           </div>
         </div>
 
-        <!-- Transição para CADASTRO -->
+        <!-- --------------------------------------- -->
+
+        <!-- Cadastro -->
         <div
           v-else
           key="cadastro"
@@ -80,6 +115,7 @@ function toggleForm() {
                 <label class="text-lg">E-mail</label>
                 <input
                   class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  v-model="formSignUp.email"
                   type="email"
                   placeholder="Digite seu email"
                 />
@@ -88,6 +124,7 @@ function toggleForm() {
                 <label class="text-lg">Senha</label>
                 <input
                   class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  v-model="formSignUp.password"
                   type="password"
                   placeholder="Digite sua senha"
                 />
@@ -96,6 +133,7 @@ function toggleForm() {
                 <label class="text-lg">Confirmar senha</label>
                 <input
                   class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  v-model="formSignUp.confirmPassword"
                   type="password"
                   placeholder="Confirme sua senha"
                 />
@@ -105,6 +143,7 @@ function toggleForm() {
           <!-- Rodapé CADASTRO -->
           <div class="flex flex-col items-center mt-6">
             <button
+              @click="SignUp()"
               class="bg-purple-500 font-baloo font-semibold rounded-full py-1.5 px-8 text-xl hover:bg-purple-600 focus:bg-purple-400"
             >
               Cadastrar
