@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 import bgImage from '../assets/backgroundAuth.png';
 import { useToast } from 'vue-toastification';
-
-const toast = useToast();
+import api from '../api/axios.js';
+import router from '@/router/index.js';
 
 interface LoginForm {
   email: string;
@@ -16,6 +16,7 @@ interface SignUpForm {
   confirmPassword: string;
 }
 
+const toast = useToast();
 const isLogin = ref(true);
 const formLogin = ref<LoginForm>({
   email: '',
@@ -28,33 +29,70 @@ const formSignUp = ref<SignUpForm>({
   confirmPassword: '',
 });
 
-function Login() {
-  console.log(formLogin.value);
-  toast.success('teste');
-}
+const Login = async () => {
+  const { email, password } = formLogin.value;
 
-function SignUp() {
-  console.log(formSignUp.value);
+  if (!email || !password) {
+    if (!email) toast.error('É necessário informar seu email');
+    if (!password) toast.error('É necessário informar sua senha');
+    return;
+  }
+
+  try {
+    const { data } = await api.post('/auth/login', { email, password });
+    localStorage.setItem('token', data.access_token);
+    toast.success('Seja Bem Vindo!');
+    router.push('/todo');
+  } catch (error: any) {
+    const { status } = error;
+    if (status === 400) {
+      toast.error('Verifique suas credenciais');
+    } else {
+      toast.error('Estamos com problemas... Tente novamente');
+    }
+  }
+};
+
+const SignUp = async () => {
+  const { email, password, confirmPassword } = formSignUp.value;
+
+  if (!email || !password || !confirmPassword) {
+    if (!email) toast.error('É necessário informar seu email');
+    if (!password) toast.error('É necessário informar sua senha');
+    if (!confirmPassword) toast.error('É necessário confirmar sua senha');
+    return;
+  }
 
   /* Valida Email */
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formSignUp.value.email)) {
+  if (!emailRegex.test(email)) {
     toast.warning('Email inválido...');
     return;
   }
 
-  /* Valida colisão de senhas */
-  const password = formSignUp.value.password;
-  const confirmPassword = formSignUp.value.confirmPassword;
+  /* Valida senhas */
   if (password !== confirmPassword) {
-    toast.warning('As senhas não coincidem...');
+    toast.warning('As senhas não coincidem');
     return;
   }
-}
 
-function toggleForm() {
+  try {
+    await api.post('users', { email, password });
+    toast.success('Usuário criado com sucesso!');
+    isLogin.value = true;
+  } catch (error: any) {
+    const { status } = error;
+    if (status === 400) {
+      toast.error('Verifique suas credenciais');
+    } else {
+      toast.error('Estamos com problemas... Tente novamente');
+    }
+  }
+};
+
+const toggleForm = () => {
   isLogin.value = !isLogin.value;
-}
+};
 </script>
 
 <template>
