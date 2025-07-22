@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import bgImage from '../assets/backgroundAuth.png';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 interface LoginForm {
   email: string;
@@ -27,10 +30,26 @@ const formSignUp = ref<SignUpForm>({
 
 function Login() {
   console.log(formLogin.value);
+  toast.success('teste');
 }
 
 function SignUp() {
   console.log(formSignUp.value);
+
+  /* Valida Email */
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formSignUp.value.email)) {
+    toast.warning('Email inválido...');
+    return;
+  }
+
+  /* Valida colisão de senhas */
+  const password = formSignUp.value.password;
+  const confirmPassword = formSignUp.value.confirmPassword;
+  if (password !== confirmPassword) {
+    toast.warning('As senhas não coincidem...');
+    return;
+  }
 }
 
 function toggleForm() {
