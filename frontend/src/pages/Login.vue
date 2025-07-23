@@ -45,7 +45,7 @@ const Login = async () => {
     router.push('/todo');
   } catch (error: any) {
     const { status } = error;
-    if (status === 400) {
+    if (status === 400 || 401) {
       toast.error('Verifique suas credenciais');
     } else {
       toast.error('Estamos com problemas... Tente novamente');
