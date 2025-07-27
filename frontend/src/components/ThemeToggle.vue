@@ -6,6 +6,7 @@ const themeStore = useThemeStore();
 
 // Carrega o tema salvo ao montar o componente
 themeStore.loadTheme();
+
 </script>
 
 <template>
@@ -19,7 +20,7 @@ themeStore.loadTheme();
         :class="[
           'rounded-full px-2 py-1',
           themeStore.theme === 'light'
-            ? 'bg-purple-600 px-3 p-2 text-lg text-white'
+            ? 'bg-DarkOrange px-3 p-2 text-lg text-white'
             : 'bg-gray-100 text-gray-500 dark:bg-gray-700',
         ]"
       >
@@ -30,7 +31,7 @@ themeStore.loadTheme();
         :class="[
           'rounded-full px-2 py-1',
           themeStore.theme === 'dark'
-            ? 'bg-purple-600 px-3 p-2 text-lg text-white'
+            ? 'bg-darkSecondary px-3 p-2 text-lg text-white'
             : 'bg-gray-100 text-gray-800 dark:bg-gray-700',
         ]"
       >

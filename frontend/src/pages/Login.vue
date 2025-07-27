@@ -1,33 +1,43 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import bgImage from '../assets/backgroundAuth.png';
+import { onMounted, ref, watch } from 'vue';
+import backgroundLightLogin from '../assets/bgLightLogin.png';
+import backgroundDarkLogin from '../assets/bgDarkLogin.png';
 import { useToast } from 'vue-toastification';
 import api from '../api/axios.js';
 import router from '@/router/index.js';
+import { useThemeStore } from '@/stores/theme.js';
 
 interface LoginForm {
   email: string;
   password: string;
 }
-
 interface SignUpForm {
   email: string;
   password: string;
   confirmPassword: string;
 }
 
+const themeStore = useThemeStore();
 const toast = useToast();
 const isLogin = ref(true);
 const formLogin = ref<LoginForm>({
   email: '',
   password: '',
 });
-
+const bgImage = ref<string>('');
 const formSignUp = ref<SignUpForm>({
   email: '',
   password: '',
   confirmPassword: '',
 });
+
+watch(
+  () => themeStore.theme,
+  (newTheme) => {
+    bgImage.value = newTheme === 'light' ? backgroundLightLogin : backgroundDarkLogin;
+  },
+  { immediate: true }
+);
 
 const Login = async () => {
   const { email, password } = formLogin.value;
@@ -98,7 +108,7 @@ const toggleForm = () => {
 <template>
   <v-app>
     <div
-      class="relative overflow-hidden min-h-screen flex items-center justify-center bg-cover bg-center"
+      class="relative flex min-h-screen items-center justify-center overflow-hidden bg-cover bg-center"
       :style="{ backgroundImage: `url(${bgImage})` }"
     >
       <Transition name="slide-horizontal" mode="out-in">
@@ -106,27 +116,32 @@ const toggleForm = () => {
         <div
           v-if="isLogin"
           key="login"
-          class="bg-black/5 backdrop-blur-lg rounded-xl h-[60vh] p-12 max-w-md w-full text-white flex flex-col justify-between"
-          style="box-shadow: 0 0 30px rgba(0, 0, 0, 0.3)"
+          class="text-paragraph dark:text-darkHeadline flex h-[60vh] w-full max-w-md flex-col justify-between rounded-xl bg-black/5 p-12 backdrop-blur-xl"
+          style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)"
         >
           <!-- Conteúdo LOGIN -->
-          <div class="flex flex-col items-center justify-center flex-grow">
-            <h1 class="text-6xl font-semibold mb-6 font-baloo">Login</h1>
-            <div class="w-full font-nunito">
+          <div class="flex flex-grow flex-col items-center justify-center">
+            <h1 class="font-baloo dark:text-darkHeadline mb-6 text-6xl font-bold">Login</h1>
+            <div class="font-nunito w-full">
               <!-- Campos -->
-              <div class="flex flex-col gap-0.5 mb-4">
-                <label class="text-lg">E-mail</label>
+              <div class="mb-4 flex flex-col gap-0.5">
+                <label
+                  class="text-paragraph dark:text-darkSecondary text-lg font-bold dark:font-semibold"
+                  >E-mail</label
+                >
                 <input
-                  class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
                   v-model="formLogin.email"
                   type="email"
                   placeholder="Digite seu email"
                 />
               </div>
               <div class="flex flex-col gap-0.5">
-                <label class="text-lg">Senha</label>
+                <label class="text-paragraph dark:text-darkSecondary text-lg dark:font-semibold"
+                  >Senha</label
+                >
                 <input
-                  class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
                   v-model="formLogin.password"
                   type="password"
                   placeholder="Digite sua senha"
@@ -135,10 +150,10 @@ const toggleForm = () => {
             </div>
           </div>
           <!-- Rodapé LOGIN -->
-          <div class="flex flex-col items-center mt-6">
+          <div class="mt-6 flex flex-col items-center">
             <button
               @click="Login()"
-              class="bg-purple-500 font-baloo font-semibold rounded-full py-1.5 px-8 text-xl hover:bg-purple-600 focus:bg-purple-400"
+              class="font-baloo dark:bg-darkSecondary bg-DarkOrange bg--500 hover:bg-paragraph focus:bg-secondary cursor-pointer rounded-full px-8 py-1.5 text-xl font-semibold text-white hover:scale-105 hover:dark:bg-violet-600 active:dark:bg-purple-500"
             >
               Entrar
             </button>
@@ -146,7 +161,7 @@ const toggleForm = () => {
               Não tem uma conta?
               <a
                 @click.prevent="toggleForm"
-                class="text-purple-300 underline hover:text-purple-500 focus:text-violet-300 cursor-pointer"
+                class="dark:text-darkParagraph text-paragraph hover:text-headline focus:text-secondary cursor-pointer underline hover:scale-105"
               >
                 Cadastrar
               </a>
@@ -154,42 +169,51 @@ const toggleForm = () => {
           </div>
         </div>
 
-        <!-- --------------------------------------- -->
+        <!-- --------------------------------------------------------------------- -->
 
         <!-- Cadastro -->
         <div
           v-else
           key="cadastro"
-          class="bg-black/5 backdrop-blur-lg rounded-xl h-[65vh] p-12 max-w-md w-full text-white flex flex-col justify-between"
+          class="text-paragraph dark:text-darkHeadline flex h-[60vh] w-full max-w-md flex-col justify-between rounded-xl bg-black/5 p-12 backdrop-blur-lg"
           style="box-shadow: 0 0 30px rgba(0, 0, 0, 0.3)"
         >
           <!-- Conteúdo CADASTRO -->
-          <div class="flex flex-col items-center justify-center flex-grow">
-            <h1 class="text-6xl font-semibold mb-6 font-baloo">Cadastro</h1>
-            <div class="w-full font-nunito">
+          <div class="flex flex-grow flex-col items-center justify-center">
+            <h1 class="font-baloo dark:text-darkHeadline mb-6 text-6xl font-bold">Cadastro</h1>
+            <div class="font-nunito w-full">
               <!-- Campos -->
-              <div class="flex flex-col gap-0.5 mb-4">
-                <label class="text-lg">E-mail</label>
+              <div class="mb-4 flex flex-col gap-0.5">
+                <label
+                  class="text-paragraph dark:text-darkSecondary text-lg font-bold dark:font-semibold"
+                  >E-mail</label
+                >
                 <input
-                  class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
                   v-model="formSignUp.email"
                   type="email"
                   placeholder="Digite seu email"
                 />
               </div>
-              <div class="flex flex-col gap-0.5 mb-4">
-                <label class="text-lg">Senha</label>
+              <div class="mb-4 flex flex-col gap-0.5">
+                <label
+                  class="text-paragraph dark:text-darkSecondary text-lg font-bold dark:font-semibold"
+                  >Senha</label
+                >
                 <input
-                  class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
                   v-model="formSignUp.password"
                   type="password"
                   placeholder="Digite sua senha"
                 />
               </div>
               <div class="flex flex-col gap-0.5">
-                <label class="text-lg">Confirmar senha</label>
+                <label
+                  class="text-paragraph dark:text-darkSecondary text-lg font-bold dark:font-semibold"
+                  >Confirmar senha</label
+                >
                 <input
-                  class="border border-violet-500 rounded-xl bg-black/10 ps-4 py-2 hover:bg-black/20 hover:border-violet-400 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
                   v-model="formSignUp.confirmPassword"
                   type="password"
                   placeholder="Confirme sua senha"
@@ -198,10 +222,10 @@ const toggleForm = () => {
             </div>
           </div>
           <!-- Rodapé CADASTRO -->
-          <div class="flex flex-col items-center mt-6">
+          <div class="mt-6 flex flex-col items-center">
             <button
               @click="SignUp()"
-              class="bg-purple-500 font-baloo font-semibold rounded-full py-1.5 px-8 text-xl hover:bg-purple-600 focus:bg-purple-400"
+              class="font-baloo dark:bg-darkSecondary bg-DarkOrange bg--500 hover:bg-paragraph focus:bg-secondary cursor-pointer rounded-full px-8 py-1.5 text-xl font-semibold text-white hover:scale-105 hover:dark:bg-violet-600 active:dark:bg-purple-500"
             >
               Cadastrar
             </button>
@@ -209,7 +233,7 @@ const toggleForm = () => {
               Já possui uma conta?
               <a
                 @click.prevent="toggleForm"
-                class="text-purple-300 underline hover:text-purple-500 focus:text-violet-300 cursor-pointer"
+                class="dark:text-darkParagraph text-paragraph hover:text-headline focus:text-secondary cursor-pointer underline hover:scale-105"
               >
                 Login
               </a>

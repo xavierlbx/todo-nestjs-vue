@@ -131,6 +131,15 @@ body {
 @theme {
   --font-baloo: "Baloo 2", "sans serif";
   --font-nunito: "Nunito", "sans serif";
+  --color-DarkOrange: #8c7851;
+  --color-background: #f9f4ef;
+  --color-paragraph: #716040;
+  --color-secondary: #eaddcf;
+  --color-headline: #020826;
+  --color-darkBackground: #16161a;
+  --color-darkHeadline: #fffffe;
+  --color-darkParagraph: #94a1b2;
+  --color-darkSecondary: #7f5af0;
 }
 
 @layer base {
