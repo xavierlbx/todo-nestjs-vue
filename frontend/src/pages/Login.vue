@@ -130,7 +130,7 @@ const toggleForm = () => {
                   >E-mail</label
                 >
                 <input
-                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10 focus:outline-none focus:border-3"
                   v-model="formLogin.email"
                   type="email"
                   placeholder="Digite seu email"
@@ -141,7 +141,7 @@ const toggleForm = () => {
                   >Senha</label
                 >
                 <input
-                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10 focus:outline-none focus:border-3"
                   v-model="formLogin.password"
                   type="password"
                   placeholder="Digite sua senha"
@@ -189,7 +189,7 @@ const toggleForm = () => {
                   >E-mail</label
                 >
                 <input
-                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10 focus:outline-none focus:border-3"
                   v-model="formSignUp.email"
                   type="email"
                   placeholder="Digite seu email"
@@ -201,7 +201,7 @@ const toggleForm = () => {
                   >Senha</label
                 >
                 <input
-                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10 focus:outline-none focus:border-3"
                   v-model="formSignUp.password"
                   type="password"
                   placeholder="Digite sua senha"
@@ -213,7 +213,7 @@ const toggleForm = () => {
                   >Confirmar senha</label
                 >
                 <input
-                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10"
+                  class="border-paragraph dark:border-darkParagraph rounded-xl border bg-black/10 py-2 ps-4 hover:border-amber-800 hover:bg-white/5 focus:bg-purple-500/10 focus:outline-none focus:border-3"
                   v-model="formSignUp.confirmPassword"
                   type="password"
                   placeholder="Confirme sua senha"
