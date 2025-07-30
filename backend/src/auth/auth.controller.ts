@@ -9,7 +9,7 @@ export class AuthController {
    constructor(private authService: AuthService) {}
 
    @Post('login')
-   login(@Body() body: AuthLoginDto) {
-      return this.authService.login(body.email, body.password);
+   login(@Body() loginDto: AuthLoginDto) {
+      return this.authService.login(loginDto);
    }
 }

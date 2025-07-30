@@ -5,30 +5,30 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
+   constructor(
+      private prisma: PrismaService,
+      private jwtService: JwtService,
+   ) {}
 
-  async validateUser(email: string, password: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+   async validateUser(email: string, password: string) {
+      const user = await this.prisma.user.findUnique({ where: { email } });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new UnauthorizedException('Credenciais inválidas');
-    }
+      if (!user || !(await bcrypt.compare(password, user.password))) {
+         throw new UnauthorizedException('Credenciais inválidas');
+      }
 
-    return { id: user.id, email: user.email };
-  }
+      return { id: user.id, email: user.email };
+   }
 
-  async login(email: string, password: string) {
-    const user = await this.validateUser(email, password);
+   async login(loginDto) {
+      const user = await this.validateUser(loginDto.email, loginDto.password);
 
-    const payload = { sub: user.id, email: user.email };
+      const payload = { sub: user.id, email: user.email };
 
-    const token = this.jwtService.sign(payload);
+      const token = this.jwtService.sign(payload);
 
-    return {
-      access_token: token,
-    };
-  }
+      return {
+         access_token: token,
+      };
+   }
 }
