@@ -24,7 +24,7 @@ export class TodoService {
       });
    }
 
-   async findOneByUser(id: number, userId: number): Promise<Todo> {
+   async findOne(id: number, userId: number): Promise<Todo> {
       const todo = await this.prisma.todo.findFirst({
          where: { id, userId },
       });
@@ -37,7 +37,7 @@ export class TodoService {
    }
 
    async update(id: number, userId: number, dto: UpdateTodoDto): Promise<Todo> {
-      await this.findOneByUser(id, userId);
+      await this.findOne(id, userId);
 
       return this.prisma.todo.update({
          where: { id },
@@ -46,7 +46,7 @@ export class TodoService {
    }
 
    async remove(id: number, userId: number): Promise<Todo> {
-      await this.findOneByUser(id, userId);
+      await this.findOne(id, userId);
 
       return this.prisma.todo.delete({
          where: { id },

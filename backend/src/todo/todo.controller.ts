@@ -38,6 +38,7 @@ export class TodoController {
 
    @Get()
    @ApiOperation({ summary: 'Lista todas as tarefas do usuário' })
+   @ApiResponse({ status: 200, description: 'Lista de tarefas retornada' })
    findAll(@Request() req): Promise<Todo[]> {
       const userId = this.getUserid(req);
       return this.todosService.findAll(userId);
@@ -47,7 +48,7 @@ export class TodoController {
    @ApiOperation({ summary: 'Busca uma tarefa específica' })
    findOne(@Param('id', ParseIntPipe) id: number, @Request() req): Promise<Todo> {
       const userId = this.getUserid(req);
-      return this.todosService.findOneByUser(id, userId);
+      return this.todosService.findOne(id, userId);
    }
 
    @Patch(':id')
