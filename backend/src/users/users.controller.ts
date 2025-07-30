@@ -13,6 +13,6 @@ export class UsersController {
   @ApiOperation({ summary: 'Cria um novo usuário' })
   @ApiResponse({ status: 201, description: 'Usuário criado com sucesso' })
   async create(@Body() dto: CreateUserDto): Promise<Omit<User, 'password'>> {
-    return this.usersService.create(dto);
+    return this.usersService.createUser(dto);
   }
 }

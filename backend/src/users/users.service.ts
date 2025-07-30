@@ -13,10 +13,19 @@ export class UsersService {
       return !!user;
    }
 
-   async create(dto: CreateUserDto): Promise<Omit<User, 'password'>> {
+   /**
+    * Cria um novo usuário com o e-mail e senha fornecidos. 
+    * Se o e-mail já estiver em uso, lança uma exceção de conflito.
+    * @param dto - Objeto contendo o e-mail e a senha do usuário.
+    * @throws ConflictException se o e-mail já estiver em uso.
+    * @return O usuário criado, sem a senha.
+    */
+
+   async createUser(dto: CreateUserDto): Promise<Omit<User, 'password'>> {
       const { email, password } = dto;
 
       const emailExists = await this.emailExists(email);
+
       if (emailExists) {
          throw new ConflictException('E-mail já está em uso.');
       }
