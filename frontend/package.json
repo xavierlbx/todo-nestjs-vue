@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.vue"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
@@ -32,6 +33,9 @@
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
     "autoprefixer": "^10.4.21",
+    "eslint": "^9.32.0",
+    "eslint-plugin-vue": "^10.4.0",
+    "globals": "^16.3.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
@@ -40,6 +44,7 @@
     "tailwindcss": "^4.1.11",
     "tw-animate-css": "^1.3.5",
     "typescript": "~5.8.3",
+    "typescript-eslint": "^8.38.0",
     "vite": "^7.0.4",
     "vue-tsc": "^2.2.12"
   }
