@@ -15,6 +15,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
+  console.log(from)
   if (to.meta.requiresAuth && !token) {
     next('/') // Redireciona pro login
   } else {
