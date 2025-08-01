@@ -2,13 +2,14 @@
 import { onMounted, ref, watch } from 'vue';
 import backgroundLightTodo from '../assets/backgroundLightTodo.png';
 import backgroundDarkTodo from '../assets/backgroundDarkTodo.png';
-import { MagnifyingGlassIcon, ChevronDownIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { MagnifyingGlassIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { PlusIcon } from '@heroicons/vue/24/solid';
-import { Menu, MenuButton, MenuItems, MenuItem, Dialog } from '@headlessui/vue';
-import api from '../api/axios.js';
+import { Dialog } from '@headlessui/vue';
+import api from '@/api/axios.ts';
 import { useToast } from 'vue-toastification';
 import router from '@/router/index.js';
 import { useThemeStore } from '@/stores/theme.js';
+import { computed } from 'vue';
 
 interface formCreateTodo {
   title: string;
@@ -20,6 +21,7 @@ const themeStore = useThemeStore();
 const bgImage = ref<string>();
 const toast = useToast();
 const dados = ref();
+const searchText = ref('');
 const isOpen = ref(false);
 const formCreateTodo = ref<formCreateTodo>({
   title: '',
@@ -37,6 +39,14 @@ watch(
 
 onMounted(() => {
   searchTasks();
+});
+
+const filteredTasks = computed(() => {
+  if (!searchText.value) return dados.value;
+
+  return dados.value?.filter((item: any) =>
+    item.title.toLowerCase().includes(searchText.value.toLowerCase())
+  );
 });
 
 const logOut = () => {
@@ -104,7 +114,7 @@ const handleCheckboxChange = async (event: Event, dado: any) => {
   }
 };
 
-function setIsOpen(value) {
+function setIsOpen(value: any) {
   isOpen.value = value;
 }
 </script>
@@ -131,7 +141,6 @@ function setIsOpen(value) {
 
         <!-- Pesquisa e Menu -->
         <div class="font-nunito flex w-full flex-row items-center justify-center gap-3">
-
           <!-- Pesquisar -->
           <div class="relative w-full">
             <MagnifyingGlassIcon
@@ -140,6 +149,7 @@ function setIsOpen(value) {
             <input
               class="border-DarkOrange hover:border-paragraph dark:border-darkSecondary w-full rounded-full border bg-black/10 py-1 ps-10 text-white hover:bg-black/15 focus:border-2 focus:outline-none hover:dark:border-purple-500"
               type="text"
+              v-model="searchText"
               placeholder="Pesquisar"
             />
           </div>
@@ -148,7 +158,7 @@ function setIsOpen(value) {
         <!-- Lista de Tarefas -->
         <div class="mt-5 w-full gap-3">
           <div
-            v-for="(dado, index) in dados"
+            v-for="(dado, index) in filteredTasks"
             :key="index"
             class="bg-background dark:bg-darkBackground mb-4 flex h-[5vh] w-full flex-row items-center justify-between gap-3 rounded-xl ps-4"
           >
