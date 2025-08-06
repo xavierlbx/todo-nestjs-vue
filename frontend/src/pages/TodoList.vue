@@ -122,7 +122,7 @@ function setIsOpen(value: any) {
 <template>
   <v-app>
     <div
-      class="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-cover bg-center"
+      class="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-cover bg-center px-3"
       :style="{ backgroundImage: `url(${bgImage})` }"
     >
       <div

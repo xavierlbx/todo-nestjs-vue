@@ -80,6 +80,11 @@ const SignUp = async () => {
     return;
   }
 
+  if(!password || password.length < 6) {
+    toast.warning('A senha deve ter pelo menos 6 caracteres');
+    return;
+  }
+
   /* Valida senhas */
   if (password !== confirmPassword) {
     toast.warning('As senhas não coincidem');
@@ -108,7 +113,7 @@ const toggleForm = () => {
 <template>
   <v-app>
     <div
-      class="relative flex min-h-screen items-center justify-center overflow-hidden bg-cover bg-center"
+      class="relative flex min-h-screen items-center justify-center overflow-hidden bg-cover bg-center px-4"
       :style="{ backgroundImage: `url(${bgImage})` }"
     >
       <Transition name="slide-horizontal" mode="out-in">
@@ -175,7 +180,7 @@ const toggleForm = () => {
         <div
           v-else
           key="cadastro"
-          class="text-paragraph dark:text-darkHeadline flex h-[60vh] w-full max-w-md flex-col justify-between rounded-xl bg-black/5 p-12 backdrop-blur-lg"
+          class="text-paragraph dark:text-darkHeadline  flex w-[90%] max-w-md min-h-fit max-h-[90vh] overflow-y-auto w-full max-w-md flex-col justify-between rounded-xl bg-black/5 p-12 backdrop-blur-xl"
           style="box-shadow: 0 0 30px rgba(0, 0, 0, 0.3)"
         >
           <!-- Conteúdo CADASTRO -->
